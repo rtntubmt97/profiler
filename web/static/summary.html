@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>A static page</title>
+  <link rel="stylesheet" href="/static/stylesheets/main.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+</head>
+
+<body>
+  <p>Project name: test</p>
+  <p>Start time: 20-07-2020 17:22:15</p>
+  <p>Interval: 1000 millisecond</p>
+  <br>
+
+  <table id="example" class="display" style="width:100%">
+    <thead>
+      <tr>
+        <th>Api Name</th>
+        <th>Total Request</th>
+        <th>Interval Request</th>
+        <th>Inverval ProcTime (microsecs)</th>
+        <th>Inverval ProcRate (req/intervalTime)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <td>Test Name</td>
+      <td>300</td>
+      <td>15</td>
+      <td>200</td>
+      <td>5000</td>
+    </tbody>
+  </table>
+
+  <script type="text/javascript" charset="utf8"
+    src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+
+  <script> $(document).ready(function () {
+      formatTable('#example')
+
+      setInterval(loadTable, 1000)
+    })
+
+    function loadTable() {
+      $.ajax({
+        url: "http://45.119.83.111:9081/api/summary", success: function (result) {
+          buildTable('#example', result)
+        }
+      })
+    }
+    function formatTable(selector) {
+      $(selector).DataTable()
+    }
+
+    function buildTable(selector, data) {
+      $(`${selector} > tbody`).empty()
+      appendData = ""
+      for (var apiName in data) {
+        apiData = data[apiName]
+
+        totalCount = apiData.TotalRequestsCounts
+        intervalCount = apiData.IntervalRequestCounts
+        intervalProcTime = apiData.IntervalProcTime
+        intervalProcRate = intervalProcTime == 0 ? 0 : 1000000 / apiData.IntervalProcTime
+
+        appendData += `<tr>
+        <td>${apiName}</td>
+        <td>${totalCount}</td>
+        <td>${intervalCount}</td>
+        <td>${intervalProcTime}</td>
+        <td>${intervalProcRate}</td>
+        </tr>`
+      }
+
+      $(`${selector} > tbody:last-child`).append(appendData)
+    }
+
+  </script>
+
+</body>
+
+</html>
