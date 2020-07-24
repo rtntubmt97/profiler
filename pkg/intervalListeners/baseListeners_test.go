@@ -36,9 +36,9 @@ func TestChainLog(t *testing.T) {
 	chainLog[0] = consoleLog
 	chainLog[1] = fileLog
 
-	chainLog.Listen(genProfiles(0))
+	chainLog.Listen(genProfiles(0), time.Now(), 0)
 	time.Sleep(time.Second * 2)
-	chainLog.Listen(genProfiles(10))
+	chainLog.Listen(genProfiles(10), time.Now(), 0)
 	time.Sleep(time.Second * 2)
 
 	file.Sync()

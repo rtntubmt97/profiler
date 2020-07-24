@@ -1,0 +1,12 @@
+---printTime: 2020-07-24 03:27:11.931531---
+---printTime: 2020-07-24 03:27:13.931815---
+[api 0] ReqCount: 410, AvgProcTime: 551
+[api 1] ReqCount: 821, AvgProcTime: 51
+[api 2] ReqCount: 937, AvgProcTime: 320
+[api 3] ReqCount: 758, AvgProcTime: 148
+[api 4] ReqCount: 216, AvgProcTime: 449
+[api 5] ReqCount: 84, AvgProcTime: 287
+[api 6] ReqCount: 574, AvgProcTime: 836
+[api 7] ReqCount: 515, AvgProcTime: 873
+[api 8] ReqCount: 968, AvgProcTime: 91
+[api 9] ReqCount: 790, AvgProcTime: 331

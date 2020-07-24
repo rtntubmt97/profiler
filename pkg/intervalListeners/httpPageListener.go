@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	k "github.com/rtntubmt97/profiler/pkg/kernel"
 )
@@ -50,6 +51,10 @@ func (httpPage *HttpPage) configCachedHandlers() {
 		FilePath:    "./web/static/stylesheets/main.css",
 		contentType: "text/css",
 	}
+	staticPages["/static/js/main.js"] = &StaticPageHandler{
+		FilePath:    "./web/static/js/main.js",
+		contentType: "application/javascript",
+	}
 
 	httpPage.CachedStaticPages = staticPages
 }
@@ -60,8 +65,8 @@ func (httpPage *HttpPage) loadCachedHandlers() {
 	}
 }
 
-func (httpPage *HttpPage) Listen(profiles map[string]*k.Profile) {
-	httpPage.InnerHttpApi.Listen(profiles)
+func (httpPage *HttpPage) Listen(profiles map[string]*k.Profile, startTime time.Time, intervalTimeMillis int) {
+	httpPage.InnerHttpApi.Listen(profiles, startTime, intervalTimeMillis)
 }
 
 type StaticPageHandler struct {

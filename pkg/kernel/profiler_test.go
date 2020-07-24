@@ -43,7 +43,7 @@ type counterListener struct {
 	count int
 }
 
-func (handler *counterListener) Listen(profiles map[string]*Profile) {
+func (handler *counterListener) Listen(profiles map[string]*Profile, startTime time.Time, intervalTimeMillis int) {
 	fmt.Printf("interval %d finished\n", handler.count)
 	handler.count++
 }

@@ -11,7 +11,7 @@ import (
 const pkgName = "handlers"
 
 // var profiler k.Profiler = app.NewFileProfiler(1000, "/home/tumd/golang-repositories/profiler/test/out.txt")
-var profiler k.Profiler = app.NewHttpPageProfiler(9081)
+var profiler k.Profiler = app.HttpPageProfiler()
 
 func GetProfile(id int64) (error, interface{}) {
 	startTime := time.Now().UnixNano()

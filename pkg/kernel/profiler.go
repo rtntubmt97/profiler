@@ -10,7 +10,7 @@ type Profiler interface {
 }
 
 type IntervalListener interface {
-	Listen(profiles map[string]*Profile)
+	Listen(profiles map[string]*Profile, startTime time.Time, intervalTimeMillis int)
 }
 
 type profiler struct {
@@ -36,7 +36,7 @@ func NewProfiler(intervalTimeMillis int, intervalHandle IntervalListener) *profi
 			for _, profile := range ret.profiles {
 				profile.intervalUpdate()
 			}
-			ret.intervalListener.Listen(ret.profiles)
+			ret.intervalListener.Listen(ret.profiles, ret.startTime, ret.intervalTimeMillis)
 			ret.Record("LastIntervalUpdate", startTime)
 		}
 	}()
