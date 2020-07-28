@@ -19,7 +19,7 @@ func ConsoleProfiler() k.Profiler {
 	if consoleProfiler == nil {
 		cpMutex.Lock()
 		if consoleProfiler == nil {
-			consoleProfiler = k.NewProfiler(1000, listeners.NewConsolLog())
+			consoleProfiler = k.NewProfiler(listeners.NewConsolLog())
 		}
 		fmt.Println("ConsoleProfiler is running")
 		cpMutex.Unlock()

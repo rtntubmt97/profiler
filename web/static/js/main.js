@@ -6,118 +6,83 @@ $(document).ready(function () {
     summaryTable = $('#summary').DataTable({
         // "processing": true,
         // "serverSide": true,
-        "paging": false,
-        "sAjaxSource": "http://45.119.83.111:9081/api/data-table"
-    })
-
-    setInterval(function(){summaryTable.ajax.reload()}, 1000)
-})
-
-Highcharts.chart('container', {
-
-    chart: {
-        scrollablePlotArea: {
-            minWidth: 700
-        }
-    },
-
-    data: {
-        csvURL: 'https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/analytics.csv',
-        beforeParse: function (csv) {
-            return csv.replace(/\n\n/g, '\n');
-        }
-    },
-
-    title: {
-        text: 'Daily sessions at www.highcharts.com'
-    },
-
-    subtitle: {
-        text: 'Source: Google Analytics'
-    },
-
-    xAxis: {
-        tickInterval: 7 * 24 * 3600 * 1000, // one week
-        tickWidth: 0,
-        gridLineWidth: 1,
-        labels: {
-            align: 'left',
-            x: 3,
-            y: -3
-        }
-    },
-
-    yAxis: [{ // left y axis
-        title: {
-            text: null
-        },
-        labels: {
-            align: 'left',
-            x: 3,
-            y: 16,
-            format: '{value:.,0f}'
-        },
-        showFirstLabel: false
-    }, { // right y axis
-        linkedTo: 0,
-        gridLineWidth: 0,
-        opposite: true,
-        title: {
-            text: null
-        },
-        labels: {
-            align: 'right',
-            x: -3,
-            y: 16,
-            format: '{value:.,0f}'
-        },
-        showFirstLabel: false
-    }],
-
-    legend: {
-        align: 'left',
-        verticalAlign: 'top',
-        borderWidth: 0
-    },
-
-    tooltip: {
-        shared: true,
-        crosshairs: true
-    },
-
-    plotOptions: {
-        series: {
-            cursor: 'pointer',
-            point: {
-                events: {
-                    click: function (e) {
-                        hs.htmlExpand(null, {
-                            pageOrigin: {
-                                x: e.pageX || e.clientX,
-                                y: e.pageY || e.clientY
-                            },
-                            headingText: this.series.name,
-                            maincontentText: Highcharts.dateFormat('%A, %b %e, %Y', this.x) + ':<br/> ' +
-                                this.y + ' sessions',
-                            width: 200
-                        });
+        paging: false,
+        // "sAjaxSource": "http://45.119.83.111:9081/api/data-table",
+        ajax: {
+            "url": "http://45.119.83.111:9081/api/data-table",
+            dataSrc: function(rsp){
+                for (var i = 0, iLen = rsp.aaData.length; i < iLen; i++){
+                    for (var j = 0, jLen = rsp.aaData[i].length; j < jLen; j++){
+                        rsp.aaData[i][j] = (parseInt(rsp.aaData[i][j]) || rsp.aaData[i][j]).toLocaleString() 
                     }
                 }
-            },
-            marker: {
-                lineWidth: 1
+                return rsp.aaData
             }
         }
-    },
+    })
 
-    series: [{
-        name: 'All sessions',
-        lineWidth: 4,
-        marker: {
-            radius: 4
-        }
-    }, {
-        name: 'New users'
-    }]
-});
-    
+    $("select#duration").on('change', function () {
+        loadChart()
+    });
+
+    $("select#interval").on('change', function () {
+        loadChart()
+    });
+
+    loadChart()
+
+    setInterval(function () { summaryTable.ajax.reload() }, 1000)
+})
+
+maxTickInterval = 30 //have to the same with server
+
+loadChart = function () {
+    Highcharts.chart('container', {
+
+        chart: {
+            scrollablePlotArea: {
+                minWidth: 700
+            }
+        },
+
+        data: {
+            csvURL: `http://45.119.83.111:9081/api/histories?duration=${$("select#duration").val()}`,
+            beforeParse: function (csv) {
+                return csv.replace(/\n\n/g, '\n');
+            },
+            enablePolling: true,
+            dataRefreshRate: $("select#duration").val()*60/maxTickInterval,
+            switchRowsAndColumns: true
+        },
+
+        time: {
+            timezoneOffset: -7 * 60
+        },
+
+        title: {
+            text: "Apis' Interval Request Count"
+        },
+
+        xAxis: {
+            type: 'datetime',
+            label: {
+                format: '%H:%M:%S.%L'
+            }
+        },
+
+        tooltip: {
+            shared: true,
+            crosshairs: true
+        },
+
+        // series: [{
+        //     name: 'GetProfile',
+        //     lineWidth: 4,
+        //     marker: {
+        //         radius: 4
+        //     }
+        // }, {
+        //     name: 'LastIntervalUpdate'
+        // }]
+    });
+}

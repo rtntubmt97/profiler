@@ -28,24 +28,34 @@
 
   <figure class="highcharts-figure">
     <div id="container"></div>
-    <p class="highcharts-description">
-      Chart showing data loaded dynamically. The individual data points can
-      be clicked to display more information.
-    </p>
+    <form>
+      <!-- <label for="interval">Interval:</label>
+      <select id="interval" name="interval">
+        <option value="1">1 second</option>
+        <option value="60">1 minute</option>
+        <option value="3600">1 hour</option>
+        <option value="86400">1 day</option>
+      </select> -->
+      <label for="duration">Duration:</label>
+      <select id="duration" name="duration">
+        <option value="1">1 min</option>
+        <option value="60">1 hour</option>
+        <option value="720">12 hours</option>
+        <option value="1440">24 hours</option>
+        <option value="10080">7 days</option>
+      </select>
+    </form>
   </figure>
+  <br>
+  <br>
 
   <script type="text/javascript" charset="utf8"
     src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
 
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/data.js"></script>
-  <script src="https://code.highcharts.com/modules/series-label.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
   <script src="https://code.highcharts.com/modules/export-data.js"></script>
-  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-  <script src="https://www.highcharts.com/samples/static/highslide-full.min.js"></script>
-  <script src="https://www.highcharts.com/samples/static/highslide.config.js" charset="utf-8"></script>
-  <link rel="stylesheet" type="text/css" href="https://www.highcharts.com/samples/static/highslide.css" />
 
   <script type="text/javascript" charset="utf8" src="http://45.119.83.111:9081/static/js/main.js"></script>
 

@@ -21,7 +21,7 @@ func FileProfiler() k.Profiler {
 		fMutex.Lock()
 		if fileProfiler == nil {
 			log, _ := listeners.NewFileLog("/tmp/profiler_data/out.txt")
-			fileProfiler = k.NewProfiler(1000, log)
+			fileProfiler = k.NewProfiler(log)
 		}
 		fmt.Println("FileProfiler is running")
 		fMutex.Unlock()
@@ -29,9 +29,9 @@ func FileProfiler() k.Profiler {
 	return fileProfiler
 }
 
-func NewFileProfiler(interval int, path string) k.Profiler {
+func NewFileProfiler(path string) k.Profiler {
 	log, _ := listeners.NewFileLog(path)
-	ret := k.NewProfiler(interval, log)
+	ret := k.NewProfiler(log)
 	fmt.Printf("FileProfiler is writting at %s\n", path)
 	return ret
 }

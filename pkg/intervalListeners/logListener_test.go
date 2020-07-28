@@ -7,18 +7,18 @@ import (
 
 func TestConsoleLog(t *testing.T) {
 	consoleLog := NewConsolLog()
-	consoleLog.Listen(genProfiles(10), time.Now(), 0)
+	consoleLog.Listen(genProfiles(10), time.Now())
 
 	time.Sleep(time.Second * 2)
-	consoleLog.Listen(genProfiles(10), time.Now(), 0)
+	consoleLog.Listen(genProfiles(10), time.Now())
 }
 
 func TestFileLog(t *testing.T) {
 	fileLog, file := NewFileLog("/home/tumd/golang-repositories/profiler/test/out.txt")
 
-	fileLog.Listen(genProfiles(0), time.Now(), 0)
+	fileLog.Listen(genProfiles(0), time.Now())
 	time.Sleep(time.Second * 2)
-	fileLog.Listen(genProfiles(10), time.Now(), 0)
+	fileLog.Listen(genProfiles(10), time.Now())
 	time.Sleep(time.Second * 2)
 
 	file.Sync()

@@ -36,9 +36,9 @@ func TestChainLog(t *testing.T) {
 	chainLog[0] = consoleLog
 	chainLog[1] = fileLog
 
-	chainLog.Listen(genProfiles(0), time.Now(), 0)
+	chainLog.Listen(genProfiles(0), time.Now())
 	time.Sleep(time.Second * 2)
-	chainLog.Listen(genProfiles(10), time.Now(), 0)
+	chainLog.Listen(genProfiles(10), time.Now())
 	time.Sleep(time.Second * 2)
 
 	file.Sync()
@@ -47,6 +47,6 @@ func TestChainLog(t *testing.T) {
 func TestHistoryLimiter(t *testing.T) {
 	historyLimiter := &HistoryLimiter{LimitLength: 5}
 	listeners := IntervalListeners{historyLimiter, new(HistoryPrinter)}
-	kernel.NewProfiler(1000, listeners)
+	kernel.NewProfiler(listeners)
 	time.Sleep(time.Second * 11)
 }

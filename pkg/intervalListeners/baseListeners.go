@@ -9,9 +9,9 @@ import (
 
 type IntervalListeners []k.IntervalListener
 
-func (listeners IntervalListeners) Listen(profiles map[string]*k.Profile, startTime time.Time, intervalTimeMillis int) {
+func (listeners IntervalListeners) Listen(profiles map[string]*k.Profile, startTime time.Time) {
 	for i := range listeners {
-		listeners[i].Listen(profiles, startTime, intervalTimeMillis)
+		listeners[i].Listen(profiles, startTime)
 	}
 }
 
@@ -27,7 +27,7 @@ type HistoryLimiter struct {
 	LimitLength int
 }
 
-func (historyLimiter *HistoryLimiter) Listen(profiles map[string]*k.Profile, startTime time.Time, intervalTimeMillis int) {
+func (historyLimiter *HistoryLimiter) Listen(profiles map[string]*k.Profile, startTime time.Time) {
 	if len(profiles) == 0 {
 		return
 	}
@@ -43,7 +43,7 @@ func (historyLimiter *HistoryLimiter) Listen(profiles map[string]*k.Profile, sta
 
 type HistoryPrinter struct{}
 
-func (historyPrinter *HistoryPrinter) Listen(profiles map[string]*k.Profile, startTime time.Time, intervalTimeMillis int) {
+func (historyPrinter *HistoryPrinter) Listen(profiles map[string]*k.Profile, startTime time.Time) {
 	for _, profile := range profiles {
 		historyLen := len(profile.History)
 		fmt.Printf("[%s.History] len: %d; value: %v\n", profile.Name, historyLen, profile.History)

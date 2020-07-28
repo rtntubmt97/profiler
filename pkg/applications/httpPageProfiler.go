@@ -27,6 +27,6 @@ func NewHttpPageProfiler(port int) k.Profiler {
 	handlers := make(listeners.IntervalListeners, 2)
 	handlers[0] = httpPage
 	handlers[1] = &listeners.HistoryLimiter{LimitLength: 10000000}
-	profiler := k.NewProfiler(1000, httpPage)
+	profiler := k.NewProfiler(httpPage)
 	return profiler
 }

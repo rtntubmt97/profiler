@@ -48,7 +48,7 @@ func (handler *DataTableHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	JsonHandle(w, r, handler.cachedData)
 }
 
-func (handler *DataTableHandler) Listen(profiles map[string]*k.Profile, startTime time.Time, intervalTimeMillis int) {
+func (handler *DataTableHandler) Listen(profiles map[string]*k.Profile, startTime time.Time) {
 	dataRsp := DataTableResponse{}
 	dataRsp.AaData = make([][]string, 0)
 

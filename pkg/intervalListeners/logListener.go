@@ -15,7 +15,7 @@ type Log struct {
 	writer   io.Writer
 }
 
-func (log *Log) Listen(profiles map[string]*k.Profile, startTime time.Time, intervalTimeMillis int) {
+func (log *Log) Listen(profiles map[string]*k.Profile, startTime time.Time) {
 	// currentTime := time.Now().Format("2006-01-02 15:04:05.000000")
 	// fmt.Fprintf(log.writer, "------%s------\n", currentTime)
 

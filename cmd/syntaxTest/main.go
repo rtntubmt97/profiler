@@ -2,11 +2,7 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"time"
-
-	listeners "github.com/rtntubmt97/profiler/pkg/intervalListeners"
 )
 
 type Foo struct {
@@ -50,13 +46,10 @@ func (b *B) foo() {
 }
 
 func main() {
-	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(dir)
-
-	httpPage := listeners.NewHttpPage()
-	httpPage.Serve(9081)
-	time.Sleep(time.Hour)
+	fmt.Println(time.Millisecond.Nanoseconds())
+	fmt.Println((time.Now().Unix()))
+	fmt.Println((time.Now().UnixNano()))
+	zone, offset := time.Now().Zone()
+	fmt.Println(zone)
+	fmt.Println(offset)
 }

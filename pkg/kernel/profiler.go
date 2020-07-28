@@ -10,20 +10,18 @@ type Profiler interface {
 }
 
 type IntervalListener interface {
-	Listen(profiles map[string]*Profile, startTime time.Time, intervalTimeMillis int)
+	Listen(profiles map[string]*Profile, startTime time.Time)
 }
 
 type profiler struct {
-	profiles           map[string]*Profile
-	startTime          time.Time
-	intervalTimeMillis int
-	intervalListener   IntervalListener
-	profilesLock       sync.Mutex
+	profiles         map[string]*Profile
+	startTime        time.Time
+	intervalListener IntervalListener
+	profilesLock     sync.Mutex
 }
 
-func NewProfiler(intervalTimeMillis int, intervalHandle IntervalListener) *profiler {
+func NewProfiler(intervalHandle IntervalListener) *profiler {
 	ret := new(profiler)
-	ret.intervalTimeMillis = intervalTimeMillis
 	ret.intervalListener = intervalHandle
 
 	ret.profiles = make(map[string]*Profile)
@@ -31,12 +29,12 @@ func NewProfiler(intervalTimeMillis int, intervalHandle IntervalListener) *profi
 	ret.Record("LastIntervalUpdate", time.Now().UnixNano())
 
 	go func() {
-		for range time.Tick(time.Millisecond * time.Duration(intervalTimeMillis)) {
+		for range time.Tick(time.Second) {
 			startTime := time.Now().UnixNano()
 			for _, profile := range ret.profiles {
 				profile.intervalUpdate()
 			}
-			ret.intervalListener.Listen(ret.profiles, ret.startTime, ret.intervalTimeMillis)
+			ret.intervalListener.Listen(ret.profiles, ret.startTime)
 			ret.Record("LastIntervalUpdate", startTime)
 		}
 	}()

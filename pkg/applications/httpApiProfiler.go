@@ -8,6 +8,6 @@ import (
 func NewHttpApiProfiler(port int) k.Profiler {
 	httpApi := listeners.NewHttpApi()
 	httpApi.Serve(port)
-	profiler := k.NewProfiler(1000, httpApi)
+	profiler := k.NewProfiler(httpApi)
 	return profiler
 }

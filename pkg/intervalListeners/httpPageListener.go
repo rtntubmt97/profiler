@@ -65,8 +65,8 @@ func (httpPage *HttpPage) loadCachedHandlers() {
 	}
 }
 
-func (httpPage *HttpPage) Listen(profiles map[string]*k.Profile, startTime time.Time, intervalTimeMillis int) {
-	httpPage.InnerHttpApi.Listen(profiles, startTime, intervalTimeMillis)
+func (httpPage *HttpPage) Listen(profiles map[string]*k.Profile, startTime time.Time) {
+	httpPage.InnerHttpApi.Listen(profiles, startTime)
 }
 
 type StaticPageHandler struct {

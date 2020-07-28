@@ -32,7 +32,7 @@ func TestProfilerRecord(t *testing.T) {
 }
 
 func TestNewProfiler(t *testing.T) {
-	profiler1 := NewProfiler(1000, new(counterListener))
+	profiler1 := NewProfiler(new(counterListener))
 	profiler1.Record("foo", 1)
 
 	//just manual check
@@ -43,7 +43,7 @@ type counterListener struct {
 	count int
 }
 
-func (handler *counterListener) Listen(profiles map[string]*Profile, startTime time.Time, intervalTimeMillis int) {
+func (handler *counterListener) Listen(profiles map[string]*Profile, startTime time.Time) {
 	fmt.Printf("interval %d finished\n", handler.count)
 	handler.count++
 }
