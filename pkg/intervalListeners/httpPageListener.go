@@ -52,6 +52,7 @@ func (httpPage *HttpPage) configCachedHandlers() {
 		FilePath:    "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/summary.html",
 		contentType: "text/html",
 	}
+	staticPages["/"] = staticPages["/static/summary.html"]
 	staticPages["/static/stylesheets/main.css"] = &StaticPageHandler{
 		FilePath:    "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/stylesheets/main.css",
 		contentType: "text/css",
