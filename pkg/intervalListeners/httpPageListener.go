@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"time"
 
 	k "github.com/rtntubmt97/profiler/pkg/kernel"
@@ -48,15 +49,15 @@ func (httpPage *HttpPage) SetupHandler(server *http.ServeMux) {
 func (httpPage *HttpPage) configCachedHandlers() {
 	staticPages := make(map[string]*StaticPageHandler)
 	staticPages["/static/summary.html"] = &StaticPageHandler{
-		FilePath:    "./web/static/summary.html",
+		FilePath:    "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/summary.html",
 		contentType: "text/html",
 	}
 	staticPages["/static/stylesheets/main.css"] = &StaticPageHandler{
-		FilePath:    "./web/static/stylesheets/main.css",
+		FilePath:    "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/stylesheets/main.css",
 		contentType: "text/css",
 	}
 	staticPages["/static/js/main.js"] = &StaticPageHandler{
-		FilePath:    "./web/static/js/main.js",
+		FilePath:    "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/js/main.js",
 		contentType: "application/javascript",
 	}
 
@@ -87,7 +88,14 @@ func (handler *StaticPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Reque
 }
 
 func (handler *StaticPageHandler) Load() {
-	data, err := ioutil.ReadFile(handler.FilePath)
+	var data []byte
+	var err error
+	if strings.HasPrefix(handler.FilePath, "http") {
+		webRsp, _ := http.Get(handler.FilePath)
+		data, err = ioutil.ReadAll(webRsp.Body)
+	} else {
+		data, err = ioutil.ReadFile(handler.FilePath)
+	}
 	if err == nil {
 		handler.Data = data
 	} else {

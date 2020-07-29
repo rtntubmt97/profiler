@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/http"
 )
 
 type Foo struct {
@@ -46,8 +48,7 @@ func (b *B) foo() {
 }
 
 func main() {
-	a := A{}
-	if a.F == nil {
-		fmt.Println("nil")
-	}
+	resp, _ := http.Get("https://github.com/rtntubmt97/profiler/blob/master/web/static/summary.html")
+	content, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(content))
 }
