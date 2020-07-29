@@ -10,22 +10,26 @@ import (
 )
 
 type HttpPage struct {
+	port              int
+	name              string
 	InnerHttpApi      *HttpApis
 	CachedStaticPages map[string]*StaticPageHandler
 }
 
-func NewHttpPage() *HttpPage {
+func NewHttpPage(port int, name string) *HttpPage {
 	ret := new(HttpPage)
-	ret.InnerHttpApi = NewHttpApi()
+	ret.name = name
+	ret.port = port
+	ret.InnerHttpApi = NewHttpApi(port, name)
 
 	return ret
 }
 
-func (httpPage *HttpPage) Serve(port int) *HttpPage {
+func (httpPage *HttpPage) Serve() *HttpPage {
 	server := http.NewServeMux()
 	httpPage.SetupHandler(server)
 	go func() {
-		http.ListenAndServe(fmt.Sprintf(":%d", port), server)
+		http.ListenAndServe(fmt.Sprintf(":%d", httpPage.port), server)
 	}()
 	return httpPage
 }

@@ -29,6 +29,7 @@ func (in *In) foo() {
 
 type A struct {
 	F []byte
+	Z string
 }
 
 func (a *A) foo() {
@@ -45,11 +46,8 @@ func (b *B) foo() {
 }
 
 func main() {
-	var fooMap map[string]bool
-	fooMap = nil
-	if fooMap == nil {
+	a := A{}
+	if a.F == nil {
 		fmt.Println("nil")
 	}
-	t := fooMap["d"]
-	fmt.Println(t)
 }

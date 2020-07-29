@@ -8,11 +8,11 @@ $(document).ready(function () {
         // "serverSide": true,
         paging: false,
         ajax: {
-            "url": "http://45.119.83.111:9081/api/data-table",
-            dataSrc: function(rsp){
-                for (var i = 0, iLen = rsp.aaData.length; i < iLen; i++){
-                    for (var j = 0, jLen = rsp.aaData[i].length; j < jLen; j++){
-                        rsp.aaData[i][j] = (parseInt(rsp.aaData[i][j]) || rsp.aaData[i][j]).toLocaleString() 
+            url: "/api/data-table",
+            dataSrc: function (rsp) {
+                for (var i = 0, iLen = rsp.aaData.length; i < iLen; i++) {
+                    for (var j = 0, jLen = rsp.aaData[i].length; j < jLen; j++) {
+                        rsp.aaData[i][j] = (parseInt(rsp.aaData[i][j]) || rsp.aaData[i][j]).toLocaleString()
                     }
                 }
                 return rsp.aaData
@@ -23,9 +23,9 @@ $(document).ready(function () {
     // $("select.duration").on('change', function () {
     //     loadChart("request-rate", "http://45.119.83.111:9081/api/histories")
     // });
-
-    loadChartWrapper("request-rate", "http://45.119.83.111:9081/api/highchart/request-rate", "Apis' Request Rate (Req/s)")
-    loadChartWrapper("process-rate", "http://45.119.83.111:9081/api/highchart/process-rate", "Apis' Process Rate Per Routine (Req/s)")
+    loadProfilerInfo()
+    loadChartWrapper("request-rate", window.location.origin + "/api/highchart/request-rate", "Apis' Request Rate (Req/s)")
+    loadChartWrapper("process-rate", window.location.origin + "/api/highchart/process-rate", "Apis' Process Rate Per Routine (Req/s)")
 
     setInterval(function () { summaryTable.ajax.reload() }, 1000)
 })
@@ -48,7 +48,7 @@ loadChart = function (id, csvUrl, title) {
                 return csv.replace(/\n\n/g, '\n');
             },
             enablePolling: true,
-            dataRefreshRate: $(`#${wrapperId} select.duration`).val()*60/maxTickInterval,
+            dataRefreshRate: $(`#${wrapperId} select.duration`).val() * 60 / maxTickInterval,
             switchRowsAndColumns: true
         },
 
@@ -74,11 +74,21 @@ loadChart = function (id, csvUrl, title) {
     });
 }
 
-loadChartWrapper = function(id, csvUrl, title) {
+loadChartWrapper = function (id, csvUrl, title) {
     wrapperId = `${id}-wrapper`
-    $(`#${wrapperId} select.duration`).on('change', function(){
+    $(`#${wrapperId} select.duration`).on('change', function () {
         loadChart(id, csvUrl, title)
     })
 
     loadChart(id, csvUrl, title)
+}
+
+loadProfilerInfo = function () {
+    $.ajax({
+        url: "/api/profiler-info",
+        success: function (result) {
+            $("#profiler-name").html(`Profiler Name: ${result.name}`);
+            $("#start-time").html(`Start Time: ${result.startTime}`);
+        }
+    });
 }
