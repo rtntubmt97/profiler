@@ -10,7 +10,7 @@ import (
 )
 
 type HttpPage struct {
-	InnerHttpApi      *HttpApi
+	InnerHttpApi      *HttpApis
 	CachedStaticPages map[string]*StaticPageHandler
 }
 

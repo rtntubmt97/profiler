@@ -19,25 +19,34 @@
       <tr>
         <th>Api Name</th>
         <th>Total Request</th>
-        <th>Interval Request</th>
-        <th>Inverval ProcTime (microsecs)</th>
-        <th>Inverval ProcRate (req/intervalTime)</th>
+        <th>Request Rate (Req/s)</th>
+        <th>Average ProcTime (microsecs)</th>
+        <th>Process Rate Per Routine (req/s)</th>
       </tr>
     </thead>
   </table>
 
-  <figure class="highcharts-figure">
-    <div id="container"></div>
+  <figure id="request-rate-wrapper" class="highcharts-figure hg-wrapper">
+    <div id="request-rate"></div>
     <form>
-      <!-- <label for="interval">Interval:</label>
-      <select id="interval" name="interval">
-        <option value="1">1 second</option>
-        <option value="60">1 minute</option>
-        <option value="3600">1 hour</option>
-        <option value="86400">1 day</option>
-      </select> -->
       <label for="duration">Duration:</label>
-      <select id="duration" name="duration">
+      <select class="duration" name="duration">
+        <option value="1">1 min</option>
+        <option value="60">1 hour</option>
+        <option value="720">12 hours</option>
+        <option value="1440">24 hours</option>
+        <option value="10080">7 days</option>
+      </select>
+    </form>
+  </figure>
+  <br>
+  <br>
+
+  <figure id="process-rate-wrapper" class="highcharts-figure hg-wrapper">
+    <div id="process-rate"></div>
+    <form>
+      <label for="duration">Duration:</label>
+      <select class="duration" name="duration">
         <option value="1">1 min</option>
         <option value="60">1 hour</option>
         <option value="720">12 hours</option>

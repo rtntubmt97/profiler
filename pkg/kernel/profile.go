@@ -17,7 +17,7 @@ type Profile struct {
 type HistorySnap struct {
 	UnixNano      int64
 	RequestCounts int
-	AvgProcTimes  int
+	AvgProcTimes  int //microsec
 }
 
 type History []HistorySnap

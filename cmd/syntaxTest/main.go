@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
 
 type Foo struct {
@@ -46,10 +45,11 @@ func (b *B) foo() {
 }
 
 func main() {
-	fmt.Println(time.Millisecond.Nanoseconds())
-	fmt.Println((time.Now().Unix()))
-	fmt.Println((time.Now().UnixNano()))
-	zone, offset := time.Now().Zone()
-	fmt.Println(zone)
-	fmt.Println(offset)
+	var fooMap map[string]bool
+	fooMap = nil
+	if fooMap == nil {
+		fmt.Println("nil")
+	}
+	t := fooMap["d"]
+	fmt.Println(t)
 }

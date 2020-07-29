@@ -7,7 +7,6 @@ $(document).ready(function () {
         // "processing": true,
         // "serverSide": true,
         paging: false,
-        // "sAjaxSource": "http://45.119.83.111:9081/api/data-table",
         ajax: {
             "url": "http://45.119.83.111:9081/api/data-table",
             dataSrc: function(rsp){
@@ -21,23 +20,21 @@ $(document).ready(function () {
         }
     })
 
-    $("select#duration").on('change', function () {
-        loadChart()
-    });
+    // $("select.duration").on('change', function () {
+    //     loadChart("request-rate", "http://45.119.83.111:9081/api/histories")
+    // });
 
-    $("select#interval").on('change', function () {
-        loadChart()
-    });
-
-    loadChart()
+    loadChartWrapper("request-rate", "http://45.119.83.111:9081/api/highchart/request-rate", "Apis' Request Rate (Req/s)")
+    loadChartWrapper("process-rate", "http://45.119.83.111:9081/api/highchart/process-rate", "Apis' Process Rate Per Routine (Req/s)")
 
     setInterval(function () { summaryTable.ajax.reload() }, 1000)
 })
 
-maxTickInterval = 30 //have to the same with server
+maxTickInterval = 30 //have the same value as server
 
-loadChart = function () {
-    Highcharts.chart('container', {
+loadChart = function (id, csvUrl, title) {
+    wrapperId = `${id}-wrapper`
+    Highcharts.chart(id, {
 
         chart: {
             scrollablePlotArea: {
@@ -46,12 +43,12 @@ loadChart = function () {
         },
 
         data: {
-            csvURL: `http://45.119.83.111:9081/api/histories?duration=${$("select#duration").val()}`,
+            csvURL: `${csvUrl}?duration=${$(`#${wrapperId} select.duration`).val()}`,
             beforeParse: function (csv) {
                 return csv.replace(/\n\n/g, '\n');
             },
             enablePolling: true,
-            dataRefreshRate: $("select#duration").val()*60/maxTickInterval,
+            dataRefreshRate: $(`#${wrapperId} select.duration`).val()*60/maxTickInterval,
             switchRowsAndColumns: true
         },
 
@@ -60,7 +57,7 @@ loadChart = function () {
         },
 
         title: {
-            text: "Apis' Interval Request Count"
+            text: title
         },
 
         xAxis: {
@@ -73,16 +70,15 @@ loadChart = function () {
         tooltip: {
             shared: true,
             crosshairs: true
-        },
-
-        // series: [{
-        //     name: 'GetProfile',
-        //     lineWidth: 4,
-        //     marker: {
-        //         radius: 4
-        //     }
-        // }, {
-        //     name: 'LastIntervalUpdate'
-        // }]
+        }
     });
+}
+
+loadChartWrapper = function(id, csvUrl, title) {
+    wrapperId = `${id}-wrapper`
+    $(`#${wrapperId} select.duration`).on('change', function(){
+        loadChart(id, csvUrl, title)
+    })
+
+    loadChart(id, csvUrl, title)
 }
