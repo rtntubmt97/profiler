@@ -15,8 +15,8 @@ import (
 func main() {
 	var profiler k.Profiler = app.HttpPageProfiler()
 	http.HandleFunc("/foo", func(w http.ResponseWriter, r *http.Request) {
-		startTime := time.Now().UnixNano()
-		defer profiler.Record("GetProfile", startTime)
+		mark := k.CreateMark()
+		defer profiler.Record("GetProfile", mark)
 		fmt.Fprint(w, "Welcome to foo!")
 	})
 	http.ListenAndServe(":9000", nil)
