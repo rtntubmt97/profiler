@@ -49,19 +49,19 @@ func (httpPage *HttpPage) SetupHandler(server *http.ServeMux) {
 func (httpPage *HttpPage) configCachedHandlers() {
 	staticPages := make(map[string]*StaticPageHandler)
 	staticPages["/static/summary.html"] = &StaticPageHandler{
-		// FilePath:    "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/summary.html",
-		FilePath:    "web/static/summary.html",
+		FilePath: "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/summary.html",
+		// FilePath:    "web/static/summary.html",
 		contentType: "text/html",
 	}
 	staticPages["/"] = staticPages["/static/summary.html"]
 	staticPages["/static/stylesheets/main.css"] = &StaticPageHandler{
-		// FilePath:    "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/stylesheets/main.css",
-		FilePath:    "web/static/stylesheets/main.css",
+		FilePath: "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/stylesheets/main.css",
+		// FilePath:    "web/static/stylesheets/main.css",
 		contentType: "text/css",
 	}
 	staticPages["/static/js/main.js"] = &StaticPageHandler{
-		// FilePath:    "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/js/main.js",
-		FilePath:    "web/static/js/main.js",
+		FilePath: "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/js/main.js",
+		// FilePath:    "web/static/js/main.js",
 		contentType: "application/javascript",
 	}
 
