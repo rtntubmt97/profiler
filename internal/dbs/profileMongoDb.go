@@ -11,6 +11,8 @@ import (
 
 	"github.com/rtntubmt97/profiler/internal/defines"
 	"github.com/rtntubmt97/profiler/internal/utils"
+	app "github.com/rtntubmt97/profiler/pkg/applications"
+	k "github.com/rtntubmt97/profiler/pkg/kernel"
 )
 
 const pkgName = "dbs"
@@ -49,7 +51,11 @@ func MongoDbInstance() *profileMongoDb {
 	return profileMongoDbInstance
 }
 
+var profiler k.Profiler = app.HttpPageProfiler()
+
 func (db *profileMongoDb) RetrieveProfile(id int64) (error, defines.Profile) {
+	mark := k.CreateMark()
+	defer profiler.Record("db.RetrieveProfile", mark)
 	var profile defines.Profile
 	err := db.profileCollection.FindOne(context.TODO(), bson.M{"id": id}).Decode(&profile)
 	return utils.WrapError(pkgName, "RetrieveProfile failed", err), profile

@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"time"
-
 	"github.com/rtntubmt97/profiler/internal/utils"
 	app "github.com/rtntubmt97/profiler/pkg/applications"
 	k "github.com/rtntubmt97/profiler/pkg/kernel"
@@ -14,8 +12,8 @@ const pkgName = "handlers"
 var profiler k.Profiler = app.HttpPageProfiler()
 
 func GetProfile(id int64) (error, interface{}) {
-	startTime := time.Now().UnixNano()
-	defer profiler.Record("GetProfile", startTime)
+	mark := k.CreateMark()
+	defer profiler.Record("handler.GetProfile", mark)
 	err, profile := db.RetrieveProfile(id)
 	return utils.WrapError(pkgName, "GetProfile failed", err), profile
 }

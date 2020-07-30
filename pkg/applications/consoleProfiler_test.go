@@ -4,22 +4,24 @@ import (
 	"math/rand"
 	"testing"
 	"time"
+
+	"github.com/rtntubmt97/profiler/pkg/kernel"
 )
 
 func TestConsoleProfiler(t *testing.T) {
 	profiler := ConsoleProfiler()
 
 	api1 := func() {
-		startTime := time.Now().UnixNano()
-		defer profiler.Record("api1", startTime)
+		mark := kernel.CreateMark()
+		defer profiler.Record("api1", mark)
 		// fmt.Println("api1")
 		sleepTime := rand.Int() % 400
 		time.Sleep(time.Duration(sleepTime) * time.Millisecond)
 	}
 
 	api2 := func() {
-		startTime := time.Now().UnixNano()
-		defer profiler.Record("api2", startTime)
+		mark := kernel.CreateMark()
+		defer profiler.Record("api2", mark)
 		// fmt.Println("api2")
 		sleepTime := rand.Int() % 400
 		time.Sleep(time.Duration(sleepTime) * time.Millisecond)

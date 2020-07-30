@@ -22,7 +22,14 @@ type HistorySnap struct {
 
 type History []HistorySnap
 
-func (pf *Profile) Record(startNanos int64) int {
+type Mark int64
+
+func CreateMark() Mark {
+	return Mark(time.Now().UnixNano())
+}
+
+func (pf *Profile) Record(mark Mark) int {
+	startNanos := int64(mark)
 	pf.procTimesLock.Lock()
 	procTimeMicros := time.Duration(time.Now().UnixNano()-startNanos) / (time.Microsecond)
 	pf.CurrentProcTimes = append(pf.CurrentProcTimes, int(procTimeMicros))

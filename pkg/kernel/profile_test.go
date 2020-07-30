@@ -17,7 +17,7 @@ func TestRecord(t *testing.T) {
 
 	ret := make([]int, n)
 	for _, record := range sample {
-		ret = append(ret, profile.Record(int64(record)))
+		ret = append(ret, profile.Record(Mark(record)))
 	}
 
 	errorIndex := findDifIndex(ret, profile.CurrentProcTimes)
@@ -37,7 +37,7 @@ func TestConcurrentRecord(t *testing.T) {
 	loopRecord := func(records, ret []int) {
 		defer wg.Done()
 		for i, record := range records {
-			ret[i] = profile.Record(int64(record))
+			ret[i] = profile.Record(Mark(record))
 		}
 	}
 	wg.Add(2)
@@ -72,7 +72,7 @@ func TestIntervalUpdate(t *testing.T) {
 	sample1 := randomIntSlice(n1)
 	ret1 := make([]int, n1)
 	for _, record := range sample1 {
-		ret1 = append(ret1, profile.Record(int64(record)))
+		ret1 = append(ret1, profile.Record(Mark(record)))
 	}
 	profile.intervalUpdate()
 
@@ -85,7 +85,7 @@ func TestIntervalUpdate(t *testing.T) {
 	sample2 := randomIntSlice(n2)
 	ret2 := make([]int, n2)
 	for _, record := range sample2 {
-		ret2 = append(ret2, profile.Record(int64(record)))
+		ret2 = append(ret2, profile.Record(Mark(record)))
 	}
 	profile.intervalUpdate()
 	profile.intervalUpdate()

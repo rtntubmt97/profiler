@@ -33,7 +33,6 @@ func (handler *HighChartHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	intervalMillis := durationMillis / int64(maxIntervalTick)
 
 	if handler.profiles == nil || handler.profiles["LastIntervalUpdate"] == nil {
-		fmt.Println("empty")
 		return
 	}
 
@@ -68,6 +67,9 @@ func (handler *HighChartHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	timestampProfile := handler.profiles["LastIntervalUpdate"]
 	timestampLen := int64(len(timestampProfile.History))
 	padding := timestampLen % historyStep // ignore some lasted history for the consistency time series
+	if historyStep < padding {
+		return
+	}
 	for i := int64(0); i < seriesLength; i++ {
 		seriesIdx := seriesLength - i
 		timestampIdx := timestampLen - padding - 1 - i*historyStep
@@ -96,30 +98,28 @@ func (handler *HighChartHandler) Listen(profiles map[string]*k.Profile, startTim
 }
 
 func NewRqRateChartHandler() *HighChartHandler {
-	return &HighChartHandler{extractChartData: avgRqRate}
+	return &HighChartHandler{extractChartData: intervalRqRate}
 }
 
-func avgRqRate(profile *k.Profile, start, step int) interface{} {
+func intervalRqRate(profile *k.Profile, start, step int) interface{} {
 	ret := 0
 	for i := start; i < start+step; i++ {
 		ret += profile.History[i].RequestCounts
 	}
-	return ret / step
+	return ret
 }
 
 func NewProcRateChartHandler() *HighChartHandler {
-	return &HighChartHandler{extractChartData: avgProcRate}
+	return &HighChartHandler{extractChartData: intervalProcRate}
 }
 
-func avgProcRate(profile *k.Profile, start, step int) interface{} {
-	avgProcTime := int64(0)
+func intervalProcRate(profile *k.Profile, start, step int) interface{} {
+	intervalProcRate := int64(0)
 	for i := start; i < start+step; i++ {
-		avgProcTime += int64(profile.History[i].AvgProcTimes)
+		if profile.History[i].AvgProcTimes == 0 {
+			continue
+		}
+		intervalProcRate += time.Second.Microseconds() / int64(profile.History[i].AvgProcTimes)
 	}
-	avgProcTime = avgProcTime / int64(step)
-	if avgProcTime != 0 {
-		return time.Second.Microseconds() / avgProcTime
-	} else {
-		return 0
-	}
+	return intervalProcRate
 }

@@ -24,8 +24,8 @@ $(document).ready(function () {
     //     loadChart("request-rate", "http://45.119.83.111:9081/api/histories")
     // });
     loadProfilerInfo()
-    loadChartWrapper("request-rate", window.location.origin + "/api/highchart/request-rate", "Apis' Request Rate (Req/s)")
-    loadChartWrapper("process-rate", window.location.origin + "/api/highchart/process-rate", "Apis' Process Rate Per Routine (Req/s)")
+    loadChartWrapper("request-rate", window.location.origin + "/api/highchart/request-rate", "Apis' Request Rate (Req/interval)")
+    loadChartWrapper("process-rate", window.location.origin + "/api/highchart/process-rate", "Apis' Process Rate Per Routine (Req/interval)")
 
     setInterval(function () { summaryTable.ajax.reload() }, 1000)
 })
@@ -34,6 +34,7 @@ maxTickInterval = 30 //have the same value as server
 
 loadChart = function (id, csvUrl, title) {
     wrapperId = `${id}-wrapper`
+    $(`#${wrapperId} .interval-value`).text($(`#${wrapperId} select.duration`).val() * 60 / maxTickInterval)
     Highcharts.chart(id, {
 
         chart: {
@@ -48,7 +49,7 @@ loadChart = function (id, csvUrl, title) {
                 return csv.replace(/\n\n/g, '\n');
             },
             enablePolling: true,
-            dataRefreshRate: $(`#${wrapperId} select.duration`).val() * 60 / maxTickInterval,
+            dataRefreshRate: $(`#${wrapperId} .interval-value`).val(),
             switchRowsAndColumns: true
         },
 
@@ -70,7 +71,12 @@ loadChart = function (id, csvUrl, title) {
         tooltip: {
             shared: true,
             crosshairs: true
-        }
+        },
+
+        // series: [,{
+        //     name: 'LastIntervalUpdate',
+        //     visible: false
+        //  },]
     });
 }
 

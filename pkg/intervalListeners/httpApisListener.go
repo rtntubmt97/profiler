@@ -45,11 +45,11 @@ func NewHttpApi(port int, name string) *HttpApis {
 	}
 }
 
-func (httpApi *HttpApis) Serve(port int, name string) *HttpApis {
+func (httpApi *HttpApis) Serve() *HttpApis {
 	server := http.NewServeMux()
 	httpApi.SetupHandler(server)
 	go func() {
-		http.ListenAndServe(fmt.Sprintf(":%d", port), server)
+		http.ListenAndServe(fmt.Sprintf(":%d", httpApi.port), server)
 	}()
 	return httpApi
 }

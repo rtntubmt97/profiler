@@ -14,7 +14,7 @@ func TestProfilerRecord(t *testing.T) {
 	loopRecord := func(name string, sample []int) {
 		defer wg.Done()
 		for _, v := range sample {
-			profiler1.Record(name, int64(v))
+			profiler1.Record(name, Mark(v))
 		}
 	}
 

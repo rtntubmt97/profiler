@@ -5,3 +5,7 @@
 .hg-wrapper {
     height: 450px;
 }
+
+mark.no-bg {
+    background-color: transparent;
+}

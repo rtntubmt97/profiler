@@ -6,7 +6,7 @@ import (
 )
 
 type Profiler interface {
-	Record(name string, startNanos int64) int
+	Record(name string, mark Mark) int
 }
 
 type IntervalListener interface {
@@ -26,16 +26,16 @@ func NewProfiler(intervalHandle IntervalListener) *profiler {
 
 	ret.profiles = make(map[string]*Profile)
 	ret.startTime = time.Now()
-	ret.Record("LastIntervalUpdate", time.Now().UnixNano())
+	ret.Record("LastIntervalUpdate", CreateMark())
 
 	go func() {
 		for range time.Tick(time.Second) {
-			startTime := time.Now().UnixNano()
+			mark := CreateMark()
 			for _, profile := range ret.profiles {
 				profile.intervalUpdate()
 			}
 			ret.intervalListener.Listen(ret.profiles, ret.startTime)
-			ret.Record("LastIntervalUpdate", startTime)
+			ret.Record("LastIntervalUpdate", mark)
 		}
 	}()
 
@@ -54,11 +54,11 @@ func (pfr *profiler) addProfile(name string) {
 	pfr.profiles[name] = newPf
 }
 
-func (pfr *profiler) Record(name string, startNanos int64) int {
+func (pfr *profiler) Record(name string, mark Mark) int {
 	if _, ok := pfr.profiles[name]; !ok {
 		pfr.addProfile(name)
 	}
 
 	profile, _ := pfr.profiles[name]
-	return profile.Record(startNanos)
+	return profile.Record(mark)
 }
