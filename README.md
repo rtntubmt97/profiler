@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	var profiler k.Profiler = app.HttpPageProfiler()
+	var profiler k.Profiler = app.HttpPageProfiler() //this profiler hosts on http://localhost:9081/
 	http.HandleFunc("/foo", func(w http.ResponseWriter, r *http.Request) {
 		mark := k.CreateMark()
 		defer profiler.Record("GetProfile", mark)
