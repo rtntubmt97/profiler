@@ -4,11 +4,38 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"path"
+	"runtime"
 	"strings"
 	"time"
 
 	k "github.com/rtntubmt97/profiler/pkg/kernel"
 )
+
+var resourcePrefix string
+
+func init() {
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		panic("No caller information")
+	}
+	fmt.Printf("Filename : %q, Dir : %q\n", filename, path.Dir(filename))
+
+	resourcePrefix = ""
+	_, err := os.Stat(resourcePrefix + "pivot.txt")
+	if os.IsExist(err) {
+		fmt.Println("Using local resource")
+		return
+	}
+
+	resourcePrefix = ""
+	_, err = os.Stat(resourcePrefix + "pivot.txt")
+	if os.IsExist(err) {
+		fmt.Println("Using local resource")
+		return
+	}
+}
 
 type HttpPage struct {
 	port              int

@@ -10,8 +10,6 @@ import (
 	// "github.com/rtntubmt97/profiler/internal/utils"
 )
 
-var Test = 2
-
 func ginGetProfile(c *gin.Context) {
 	idStr := c.Request.URL.Query().Get("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)
