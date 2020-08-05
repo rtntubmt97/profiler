@@ -1,2 +1,6 @@
 go.mod
 go.sum
+
+internal/
+cmd/
+test/
