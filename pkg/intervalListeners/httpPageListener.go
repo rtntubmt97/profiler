@@ -109,7 +109,7 @@ type StaticPageHandler struct {
 }
 
 func (handler *StaticPageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	handler.Load()
+	// handler.Load()
 	w.Header().Set("Content-Type", handler.contentType)
 	w.WriteHeader(http.StatusOK)
 	w.Write(handler.Data)
