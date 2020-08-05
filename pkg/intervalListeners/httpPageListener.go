@@ -29,7 +29,6 @@ func init() {
 	if err == nil {
 		resourcePrefix = prjPath + "/web/static"
 	}
-	fmt.Println(resourcePrefix)
 }
 
 type HttpPage struct {
