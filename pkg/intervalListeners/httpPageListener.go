@@ -16,24 +16,18 @@ import (
 var resourcePrefix string
 
 func init() {
+	resourcePrefix = "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static"
 	_, filename, _, ok := runtime.Caller(0)
 	if !ok {
-		panic("No caller information")
-	}
-	fmt.Printf("Filename : %q, Dir : %q\n", filename, path.Dir(filename))
-
-	resourcePrefix = ""
-	_, err := os.Stat(resourcePrefix + "pivot.txt")
-	if os.IsExist(err) {
-		fmt.Println("Using local resource")
+		fmt.Println("Download resource via internet...")
 		return
 	}
-
-	resourcePrefix = ""
-	_, err = os.Stat(resourcePrefix + "pivot.txt")
-	if os.IsExist(err) {
-		fmt.Println("Using local resource")
-		return
+	currentPath := path.Dir(filename)
+	moduleRelatePath := "/pkg/intervalListeners"
+	prjPath := currentPath[0 : len(currentPath)-len(moduleRelatePath)]
+	_, err := os.Stat(prjPath + "/web/pivot.txt")
+	if err == nil {
+		resourcePrefix = prjPath + "/web/static"
 	}
 }
 
@@ -76,18 +70,21 @@ func (httpPage *HttpPage) SetupHandler(server *http.ServeMux) {
 func (httpPage *HttpPage) configCachedHandlers() {
 	staticPages := make(map[string]*StaticPageHandler)
 	staticPages["/static/summary.html"] = &StaticPageHandler{
-		FilePath: "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/summary.html",
+		FilePath: resourcePrefix + "/summary.html",
+		// FilePath: "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/summary.html",
 		// FilePath:    "web/static/summary.html",
 		contentType: "text/html",
 	}
 	staticPages["/"] = staticPages["/static/summary.html"]
 	staticPages["/static/stylesheets/main.css"] = &StaticPageHandler{
-		FilePath: "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/stylesheets/main.css",
+		FilePath: resourcePrefix + "/stylesheets/main.css",
+		// FilePath: "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/stylesheets/main.css",
 		// FilePath:    "web/static/stylesheets/main.css",
 		contentType: "text/css",
 	}
 	staticPages["/static/js/main.js"] = &StaticPageHandler{
-		FilePath: "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/js/main.js",
+		FilePath: resourcePrefix + "/js/main.js",
+		// FilePath: "https://raw.githubusercontent.com/rtntubmt97/profiler/master/web/static/js/main.js",
 		// FilePath:    "web/static/js/main.js",
 		contentType: "application/javascript",
 	}
