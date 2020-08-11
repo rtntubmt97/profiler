@@ -9,7 +9,7 @@ import (
 
 func main() {
 	totalReqCount := 0
-	loop := 10
+	loop := 100
 	for i := 0; i < loop; i++ {
 		// be careful of reqCount value, running spam tool and webserver on the same host may cause the request rate too high
 		// golang httpServer will drop the request if the request queue reach its limit
