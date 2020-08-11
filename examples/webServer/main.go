@@ -11,6 +11,7 @@ import (
 	k "github.com/rtntubmt97/profiler/pkg/kernel"
 )
 
+// this default profiler will run on localhost:9081
 var profiler k.Profiler = app.HttpPageProfiler()
 
 func main() {

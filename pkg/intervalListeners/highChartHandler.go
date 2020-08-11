@@ -38,7 +38,7 @@ func (handler *HighChartHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 
 	data := make([][]string, len(handler.profiles)+1)
 	sortedNames := make([]string, 0)
-	for name, _ := range handler.profiles {
+	for name := range handler.profiles {
 		if handler.hideProfiles != nil && handler.hideProfiles[name] {
 			continue
 		}
