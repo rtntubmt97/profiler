@@ -21,6 +21,8 @@ func genProfiles(n int) map[string]*k.Profile {
 			RequestCounts: rand.Int() % 1000,
 			AvgProcTimes:  rand.Int() % 1000,
 		}
+
+		profile.PreviousProcTimes = randomIntSlice(historySnap.RequestCounts)
 		profile.History = append(profile.History, historySnap)
 
 		ret[name] = profile
@@ -49,4 +51,12 @@ func TestHistoryLimiter(t *testing.T) {
 	listeners := IntervalListeners{historyLimiter, new(HistoryPrinter)}
 	kernel.NewProfiler(listeners)
 	time.Sleep(time.Second * 11)
+}
+
+func randomIntSlice(n int) []int {
+	ret := make([]int, n)
+	for i := range ret {
+		ret[i] = rand.Int()
+	}
+	return ret
 }

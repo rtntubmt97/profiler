@@ -66,13 +66,13 @@ func (handler *HighChartHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 
 	timestampProfile := handler.profiles["LastIntervalUpdate"]
 	timestampLen := int64(len(timestampProfile.History))
-	padding := timestampLen % historyStep // ignore some lasted history for the consistency time series
-	if historyStep < padding {
+	tsPadding := timestampLen % historyStep // ignore some lasted history for the consistency time series
+	if historyStep < tsPadding {
 		return
 	}
 	for i := int64(0); i < seriesLength; i++ {
 		seriesIdx := seriesLength - i
-		timestampIdx := timestampLen - padding - 1 - i*historyStep
+		timestampIdx := timestampLen - tsPadding - 1 - i*historyStep
 		timestampValue := timestampProfile.History[timestampLen-1].UnixNano/time.Millisecond.Nanoseconds() - i*historyStep*time.Second.Milliseconds()
 		if timestampIdx >= 0 {
 			timestampValue = timestampProfile.History[timestampIdx].UnixNano / time.Millisecond.Nanoseconds()
@@ -80,7 +80,8 @@ func (handler *HighChartHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		data[0][seriesIdx] = fmt.Sprintf("%d", timestampValue)
 		for j, name := range sortedNames {
 			profile := handler.profiles[name]
-			historyEndIdx := int64(len(profile.History)) - padding - i*historyStep
+			prPadding := int64(len(profile.History)) % historyStep
+			historyEndIdx := int64(len(profile.History)) - prPadding - i*historyStep
 			if historyEndIdx-historyStep < 0 {
 				continue
 			}
