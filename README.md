@@ -5,6 +5,8 @@ package main
 
 import (
 	"fmt"
+	"html"
+	"math/rand"
 	"net/http"
 	"time"
 
@@ -12,17 +14,36 @@ import (
 	k "github.com/rtntubmt97/profiler/pkg/kernel"
 )
 
-func main() {
-	var profiler k.Profiler = app.HttpPageProfiler() //this profiler hosts on http://localhost:9081/
-	http.HandleFunc("/foo", func(w http.ResponseWriter, r *http.Request) {
-		// add this block to your code to profiler the whole method -->
-		mark := k.CreateMark()
-		defer profiler.Record("GetProfile", mark)
-		//
+// this default profiler will run on localhost:9081
+var profiler k.Profiler = app.HttpPageProfiler()
 
-		fmt.Fprint(w, "Welcome to foo!")
-	})
-	http.ListenAndServe(":9000", nil)
+func main() {
+	http.HandleFunc("/foo", FooHandler)
+	http.ListenAndServe(":9080", nil)
+}
+
+func FooHandler(rsp http.ResponseWriter, request *http.Request) {
+	mark := k.CreateMark()
+	defer profiler.Record("FooHandler", mark)
+
+	// doing something in handler
+	processTimeMillis := rand.Int() % 100
+	time.Sleep(time.Microsecond * time.Duration(processTimeMillis))
+	fmt.Fprintf(rsp, "Hello, %q", html.EscapeString(request.URL.Path))
+
+	// process something in db
+	n := rand.Int() % 5
+	for i := 0; i < n; i++ {
+		dbProcess()
+	}
+}
+
+func dbProcess() {
+	mark := k.CreateMark()
+	defer profiler.Record("dbProcess", mark)
+
+	processTimeMillis := rand.Int() % 100
+	time.Sleep(time.Microsecond * time.Duration(processTimeMillis))
 }
 
 ```
